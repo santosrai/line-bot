@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2016 LINE Corporation
  *
@@ -14,7 +15,9 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+
 namespace LINE\LINEBot\EchoBot;
+
 use LINE\LINEBot;
 use LINE\LINEBot\Constant\HTTPHeader;
 use LINE\LINEBot\Event\MessageEvent;
@@ -23,6 +26,7 @@ use LINE\LINEBot\Exception\InvalidEventRequestException;
 use LINE\LINEBot\Exception\InvalidSignatureException;
 use LINE\LINEBot\Exception\UnknownEventTypeException;
 use LINE\LINEBot\Exception\UnknownMessageTypeException;
+
 class Route
 {
     public function register(\Slim\App $app)
@@ -32,10 +36,12 @@ class Route
             $bot = $this->bot;
             /** @var \Monolog\Logger $logger */
             $logger = $this->logger;
+
             $signature = $req->getHeader(HTTPHeader::LINE_SIGNATURE);
             if (empty($signature)) {
                 return $res->withStatus(400, 'Bad Request');
             }
+
             // Check request with signature and parse request
             try {
                 $events = $bot->parseEventRequest($req->getBody(), $signature[0]);
@@ -48,38 +54,58 @@ class Route
             } catch (InvalidEventRequestException $e) {
                 return $res->withStatus(400, "Invalid event request");
             }
+
             foreach ($events as $event) {
                 if (!($event instanceof MessageEvent)) {
                     $logger->info('Non message event has come');
                     continue;
                 }
+
                 if (
                   !($event instanceof TextMessage) ||
                   !($event instanceof ImageMessage)
                 ) {
                     $logger->info('Non text message has come');
-                    
+
                 }
+
                 $userId = $event->getUserId();
                 $mesId = $event->getMessageId();
+
              $bot->pushMessage($userId, new LINEBot\MessageBuilder\TextMessageBuilder('push'));
+
+             //for profile
+             $profile_response = $bot->getProfile($userId);
+
+             if ($profile_response->isSucceeded()) {
+               $profile = $profile_response->getJSONDecodedBody();
+               $name = $profile['displayName'];
+               echo $profile['pictureUrl'];
+               echo $profile['statusMessage'];
+               $bot->pushMessage($userId, new LINEBot\MessageBuilder\TextMessageBuilder($name));
+
+             }
+
+            //for file saving in own server and displaying it
              $response = $bot->getMessageContent($mesId);
              if ($response->isSucceeded()) {
-               error_log('isSucceeded');
+               error_log('isSucceeded');//for checking error
                $tempfile = tmpfile();
-                 $fp = fopen(__DIR__ . '/../../../public/' . $mesId, 'w');
+               $fp = fopen(__DIR__ . '/../../../public/' . $mesId, 'w');//here it hasnot own website but our heroku is like website to use it
                fwrite($fp, $response->getRawBody());
                $bot->pushMessage($userId, new LINEBot\MessageBuilder\ImageMessageBuilder('https://raibeta.herokuapp.com/'.$mesId,'https://raibeta.herokuapp.com/'.$mesId));
              } else {
                error_log($response->getHTTPStatus() . ' ' . $response->getRawBody());
                $bot->pushMessage($userId, new LINEBot\MessageBuilder\TextMessageBuilder('unsuccess'));
-                 
+
              }
+
                 //$replyText = $event->getText();
                // $logger->info('Reply text: ' . $replyText);
                // $resp = $bot->replyText($event->getReplyToken(), $replyText);
               //  $logger->info($resp->getHTTPStatus() . ': ' . $resp->getRawBody());
             }
+
             $res->write('OK');
             return $res;
         });
