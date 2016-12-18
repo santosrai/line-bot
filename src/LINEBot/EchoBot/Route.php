@@ -77,7 +77,7 @@ class Route
                     return $value;
                 $columns[] = new CarouselColumnTemplateBuilder(
                                 $value['name'],
-                                $value['category'],
+                                $value['category']
                             );
             }
                 $carouselTemplateBuilder = new CarouselTemplateBuilder($columns);
