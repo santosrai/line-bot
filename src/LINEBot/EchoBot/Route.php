@@ -61,7 +61,10 @@ class Route
                     continue;
                 }
 
-                if (!($event instanceof TextMessage)) {
+                if (
+                  !($event instanceof TextMessage) ||
+                  !($event instanceof ImageMessage)
+                ) {
                     $logger->info('Non text message has come');
                     continue;
                 }
@@ -73,6 +76,7 @@ class Route
 
              $response = $bot->getMessageContent($mesId);
              if ($response->isSucceeded()) {
+               error_log('isSucceeded');
                $tempfile = tmpfile();
                fwrite($tempfile, $response->getRawBody());
                $bot->pushMessage($userId, new LINEBot\MessageBuilder\TextMessageBuilder('success'));
