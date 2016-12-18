@@ -73,7 +73,7 @@ class Route
                 $mesId = $event->getMessageId();
 
                 //Using TemplateType
-                foreach(array(1, 2) as $value){
+                foreach(array("nam","sam") as $value){
                     return $value;
                 $columns[] = new CarouselColumnTemplateBuilder(
                                 $value['name'],
