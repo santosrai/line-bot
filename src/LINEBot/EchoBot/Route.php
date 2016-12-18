@@ -75,13 +75,13 @@ class Route
              $bot->pushMessage($userId, new LINEBot\MessageBuilder\TextMessageBuilder('push'));
 
              //for profile
-             $profile_response = $bot->getProfile($userId);
+             //$profile_response = $bot->getProfile($userId);
 
-             if ($profile_response->isSucceeded()) {
-               $profile = $response->getJSONDecodedBody();
-               echo $profile['displayName'];
-               echo $profile['pictureUrl'];
-               echo $profile['statusMessage'];
+            // if ($profile_response->isSucceeded()) {
+            //   $profile = $response->getJSONDecodedBody();
+           //    echo $profile['displayName'];
+            //   echo $profile['pictureUrl'];
+             //  echo $profile['statusMessage'];
 }
 
             //for file saving in own server and displaying it
