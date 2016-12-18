@@ -67,16 +67,18 @@ class Route
                 }
 
                 $userId = $event->getUserId();
+                $mesId = $event->getMessageId();
 
              $bot->pushMessage($userId, new LINEBot\MessageBuilder\TextMessageBuilder('push'));
 
-             $response = $bot->getMessageContent('<messageId>');
+             $response = $bot->getMessageContent($mesId);
              if ($response->isSucceeded()) {
                $tempfile = tmpfile();
                fwrite($tempfile, $response->getRawBody());
                $bot->pushMessage($userId, new LINEBot\MessageBuilder\TextMessageBuilder('success'));
              } else {
                error_log($response->getHTTPStatus() . ' ' . $response->getRawBody());
+               $bot->pushMessage($userId, new LINEBot\MessageBuilder\TextMessageBuilder('unsuccess'));
              }
 
                 //$replyText = $event->getText();
