@@ -80,10 +80,11 @@ class Route
                $tempfile = tmpfile();
                  $fp = fopen(__DIR__ . '/../../../public/' . $mesId, 'w');
                fwrite($fp, $response->getRawBody());
-               $bot->pushMessage($userId, new LINEBot\MessageBuilder\TextMessageBuilder('success'));
+               $bot->pushMessage($userId, new LINEBot\MessageBuilder\ImageMessageBuilder('https://raibeta.herokuapp.com/'.$mesId,'https://raibeta.herokuapp.com/'.$mesId));
              } else {
                error_log($response->getHTTPStatus() . ' ' . $response->getRawBody());
                $bot->pushMessage($userId, new LINEBot\MessageBuilder\TextMessageBuilder('unsuccess'));
+                 
              }
 
                 //$replyText = $event->getText();
