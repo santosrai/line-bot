@@ -66,7 +66,7 @@ class Route
                   !($event instanceof ImageMessage)
                 ) {
                     $logger->info('Non text message has come');
-                    continue;
+                    
                 }
 
                 $userId = $event->getUserId();
