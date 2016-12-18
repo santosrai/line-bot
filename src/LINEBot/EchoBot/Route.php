@@ -78,7 +78,8 @@ class Route
              if ($response->isSucceeded()) {
                error_log('isSucceeded');
                $tempfile = tmpfile();
-               fwrite($tempfile, $response->getRawBody());
+                 $fp = fopen(__DIR__ . '/../../../public/' . $mesId, 'w');
+               fwrite($fp, $response->getRawBody());
                $bot->pushMessage($userId, new LINEBot\MessageBuilder\TextMessageBuilder('success'));
              } else {
                error_log($response->getHTTPStatus() . ' ' . $response->getRawBody());
