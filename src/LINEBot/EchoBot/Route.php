@@ -66,7 +66,7 @@ class Route
                   !($event instanceof ImageMessage)
                 ) {
                     $logger->info('Non text message has come');
-                    
+
                 }
 
                 $userId = $event->getUserId();
@@ -74,17 +74,28 @@ class Route
 
              $bot->pushMessage($userId, new LINEBot\MessageBuilder\TextMessageBuilder('push'));
 
+             //for profile
+             $profile_response = $bot->getProfile($userId);
+
+             if ($profile_response->isSucceeded()) {
+               $profile = $response->getJSONDecodedBody();
+               echo $profile['displayName'];
+               echo $profile['pictureUrl'];
+               echo $profile['statusMessage'];
+}
+
+            //for file saving in own server and displaying it
              $response = $bot->getMessageContent($mesId);
              if ($response->isSucceeded()) {
-               error_log('isSucceeded');
+               error_log('isSucceeded');//for checking error
                $tempfile = tmpfile();
-                 $fp = fopen(__DIR__ . '/../../../public/' . $mesId, 'w');
+               $fp = fopen(__DIR__ . '/../../../public/' . $mesId, 'w');//here it hasnot own website but our heroku is like website to use it
                fwrite($fp, $response->getRawBody());
                $bot->pushMessage($userId, new LINEBot\MessageBuilder\ImageMessageBuilder('https://raibeta.herokuapp.com/'.$mesId,'https://raibeta.herokuapp.com/'.$mesId));
              } else {
                error_log($response->getHTTPStatus() . ' ' . $response->getRawBody());
                $bot->pushMessage($userId, new LINEBot\MessageBuilder\TextMessageBuilder('unsuccess'));
-                 
+
              }
 
                 //$replyText = $event->getText();
