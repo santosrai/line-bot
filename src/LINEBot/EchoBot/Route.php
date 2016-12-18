@@ -61,13 +61,7 @@ class Route
                     continue;
                 }
 
-                if (
-                  !($event instanceof TextMessage) ||
-                  !($event instanceof ImageMessage)
-                ) {
-                    $logger->info('Non text message has come');
-
-                }
+                
 
                 $userId = $event->getUserId();
                 $mesId = $event->getMessageId();
