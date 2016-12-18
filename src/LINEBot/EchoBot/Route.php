@@ -74,6 +74,7 @@ class Route
              if ($response->isSucceeded()) {
                $tempfile = tmpfile();
                fwrite($tempfile, $response->getRawBody());
+               $bot->pushMessage($userId, new LINEBot\MessageBuilder\TextMessageBuilder('success'));
              } else {
                error_log($response->getHTTPStatus() . ' ' . $response->getRawBody());
              }
