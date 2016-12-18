@@ -72,8 +72,17 @@ class Route
                 $userId = $event->getUserId();
                 $mesId = $event->getMessageId();
 
-             $bot->pushMessage($userId, new LINEBot\MessageBuilder\TextMessageBuilder('push'));
-
+                //Using TemplateType
+                $columns[] = new CarouselColumnTemplateBuilder(
+                                'name',
+                                'category',
+                            );
+                $carouselTemplateBuilder = new CarouselTemplateBuilder($columns);
+                $multiMessageBuilder = new MultiMessageBuilder();
+              $response = $bot->pushMessage(
+                    add(new TemplateMessageBuilder('alt text', $carouselTemplateBuilder));
+                    add(new LINEBot\MessageBuilder\TextMessageBuilder('push'));
+           );
              //for profile
              $profile_response = $bot->getProfile($userId);
 
