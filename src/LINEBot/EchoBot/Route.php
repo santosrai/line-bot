@@ -75,13 +75,11 @@ class Route
                 //Using TemplateType
                 foreach(array(1, 2) as $value){
                     return $value;
-                }
-
-
                 $columns[] = new CarouselColumnTemplateBuilder(
                                 $value['name'],
                                 $value['category'],
                             );
+            }
                 $carouselTemplateBuilder = new CarouselTemplateBuilder($columns);
                 $multiMessageBuilder = new MultiMessageBuilder();
               $response = $bot->pushMessage(
