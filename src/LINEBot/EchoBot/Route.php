@@ -83,7 +83,7 @@ class Route
                 $carouselTemplateBuilder = new CarouselTemplateBuilder($columns);
                 $multiMessageBuilder = new MultiMessageBuilder();
               $response = $bot->pushMessage(
-                    add(new TemplateMessageBuilder('alt text', $carouselTemplateBuilder));
+                    add(new TemplateMessageBuilder('alt text', $carouselTemplateBuilder))
                     add(new LINEBot\MessageBuilder\TextMessageBuilder('push'));
            );
              //for profile
