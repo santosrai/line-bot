@@ -72,21 +72,8 @@ class Route
                 $userId = $event->getUserId();
                 $mesId = $event->getMessageId();
 
-                //Using TemplateType
-                foreach(array("nam","sam") as $value){
-                    return $value;
-                $columns[] = new CarouselColumnTemplateBuilder(
-                                $value['name'],
-                                $value['category']
-                            );
-            }
-                $carouselTemplateBuilder = new CarouselTemplateBuilder($columns);
-                $multiMessageBuilder = new MultiMessageBuilder();
-               $response = $bot->pushMessage(
-                  $multiMessageBuilder
-                    ->add(new TemplateMessageBuilder('alt text', $carouselTemplateBuilder))
-                    ->add(new LINEBot\MessageBuilder\TextMessageBuilder('push'))
-           );
+             $bot->pushMessage($userId, new LINEBot\MessageBuilder\TextMessageBuilder('push'));
+
              //for profile
              $profile_response = $bot->getProfile($userId);
 
